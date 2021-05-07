@@ -10,8 +10,16 @@ import {
 
 const {ADD_TODO, DELETE_TODO, DONE_TODO} = EToDoActions;
 
+const defaultToDo: IToDoItem[] = [
+  {id: "1", title: "Сходить за хлебом", description: "Сдачу оставить себе", isDone: false},
+  {id: "2", title: "Посмотреть курс по реакт", description: "там все на буржуйском ёмаё", isDone: false},
+  {id: "3", title: "Посмотреть курс по редакс", description: "че так сложно я лучше буду useState юзать (шутка)", isDone: false},
+  {id: "4", title: "Посмотреть курс по тайпскрипт", description: "ой как ты заебал красным подчеркивать получай // eslint-disable-next-line", isDone: false},
+]
+
 const getDefaultToDO = (): IToDoItem[] => {
-  return JSON.parse(localStorage.getItem("toDoList") || "[]");
+  if (!localStorage.getItem("toDoList")) return defaultToDo;
+  return JSON.parse(String(localStorage.getItem("toDoList")));
 }
 
 export const updateLocalStorageToDO = (items: IToDoItem[]): void => {
