@@ -6,28 +6,35 @@ import {
   IDoneToDoAction, IDoneToDoPayload,
   IToDoItem,
   TToDoActions
-} from "./types";
+}              from "./types";
 
 const {ADD_TODO, DELETE_TODO, DONE_TODO} = EToDoActions;
 
-const defaultToDo: IToDoItem[] = [
-  {id: "1", title: "kakoy to titul", description: "kakoe to opisanie", isDone: false},
-  {id: "2", title: "kakoy to titul", description: "kakoe to opisanie", isDone: false},
-  {id: "3", title: "kakoy to titul", description: "kakoe to opisanie", isDone: false},
-  {id: "4", title: "kakoy to titul", description: "kakoe to opisanie", isDone: false},
-  {id: "5", title: "kakoy to titul", description: "kakoe to opisanie", isDone: false},
-]
+const getDefaultToDO = (): IToDoItem[] => {
+  return JSON.parse(localStorage.getItem("toDoList") || "[]");
+}
 
-export const reducerToDo = (state: IToDoItem[] = defaultToDo, action: TToDoActions): IToDoItem[] => {
+export const updateLocalStorageToDO = (items: IToDoItem[]): void => {
+  localStorage.setItem("toDoList", JSON.stringify(items));
+}
+
+export const reducerToDo = (state: IToDoItem[] = getDefaultToDO(), action: TToDoActions): IToDoItem[] => {
   switch (action.type) {
     case ADD_TODO:
-      const {title, description, isDone} = action.payload;
-      return [...state, {id: String(Date.now()), isDone: !!isDone, title, description}];
+      const {title, description} = action.payload;
+      updateLocalStorageToDO([...state, {id: String(Date.now()), isDone: false, title, description}])
+      return [...state, {id: String(Date.now()), isDone: false, title, description}];
     case DELETE_TODO:
       const {id: deleteId} = action.payload;
+      updateLocalStorageToDO(state.filter(({id}) => id !== deleteId))
       return state.filter(({id}) => id !== deleteId);
     case DONE_TODO:
       const {id: doneId} = action.payload;
+      updateLocalStorageToDO(state.map(item => {
+        const {id: itemId, isDone} = item;
+        if (itemId === doneId) return {...item, isDone: !isDone};
+        return item;
+      }))
       return state.map(item => {
         const {id: itemId, isDone} = item;
         if (itemId === doneId) return {...item, isDone: !isDone};

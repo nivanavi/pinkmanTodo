@@ -16,7 +16,7 @@ const ToDoList: React.FC = () => {
   return (
     <StyledToDoListWrapper>
       <TransitionGroup component="div">
-        {toDoList.map(item =>
+        {!!toDoList.length && toDoList.map(item =>
           <CSSTransition
             key={item.id}
             timeout={500}
@@ -26,6 +26,7 @@ const ToDoList: React.FC = () => {
           </CSSTransition>
         )}
       </TransitionGroup>
+      {!toDoList.length && <h1>Нет задач? ты не перепутал!?🤬</h1>}
     </StyledToDoListWrapper>
   );
 };

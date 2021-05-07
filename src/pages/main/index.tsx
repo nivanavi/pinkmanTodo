@@ -1,12 +1,15 @@
-import React    from 'react';
-import ToDoList from "./components/toDoList";
+import React                   from 'react';
+import ToDoList                from "./components/toDoList";
+import AddToDo                 from "./components/addToDo";
+import {StyledMainPageWrapper} from "./styles";
 
 const MainPage = () => {
   return (
-    <>
-      <h1>page with to do list</h1>
+    <StyledMainPageWrapper>
+      <h1>Списокъ делъ 📋</h1>
+      <AddToDo/>
       <ToDoList/>
-    </>
+    </StyledMainPageWrapper>
   );
 };
 
